@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yuuzi MC</title>
+  <style>
+    :root{--bg:#0f1720;--card:#111827;--accent:#ffcc00;--muted:#9aa6b2}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;background:linear-gradient(180deg,#07121a 0%,#071018 100%);color:#e6eef5}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(0,0,0,0.2);backdrop-filter: blur(4px)}
+    .brand{display:flex;gap:14px;align-items:center}
+    .brand img{width:48px;height:48px;object-fit:contain}
+    nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:6px}
+    nav a:hover{color:#fff;background:rgba(255,255,255,0.03)}
+    nav select {
+      background: transparent; 
+      color: var(--muted);
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .container{max-width:1200px;margin:28px auto;padding:0 18px}
+    .hero{display:flex;gap:20px;align-items:center}
+    .hero-left{flex:1}
+    .hero-right{width:320px}
+    .search{margin-top:12px}
+    .search input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+
+    .categories{display:flex;gap:12px;margin:18px 0}
+    .cat{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--muted);cursor:pointer}
+    .cat.active{background:linear-gradient(90deg,#112233,#0f1620);color:#fff}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03)}
+    .thumb{height:140px;background-size:cover;background-position:center;border-radius:8px;margin-bottom:10px}
+    .card h4{margin:0 0 6px 0}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .btn{background:var(--accent);border:none;padding:8px 12px;border-radius:8px;color:#111;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    footer{margin-top:28px;padding:20px 0;color:var(--muted);text-align:center}
+
+    /* cursor helper */
+    .cursor-active { cursor: url('https://cdn-icons-png.flaticon.com/512/32/32178.png') 8 8, auto; }
+
+    @media(max-width:860px){.hero{flex-direction:column}.hero-right{width:100%}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="https://i.imgur.com/HfbUM3A.png" alt="NexusMc">
+      <div>
+        <div style="font-weight:800">Yexas Mc Store</div>
+        <div style="font-size:12px;color:var(--muted)">Premium plugins, builds & bundles</div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">HOME</a></li>
+        <li><a href="#">PLUGINS</a></li>
+        <li><a href="#">BUILDS</a></li>
+        <li><a href="#">BUNDLES</a></li>
+        <li><a href="#">INFO</a></li>
+        <li>
+          <select id="currencySelect" title="通貨を選択">
+            <option value="GBP">£ GBP</option>
+            <option value="USD">$ USD</option>
+            <option value="JPY">¥ JPY</option>
+          </select>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1 style="margin:0;font-size:28px">PlUGINS AND BUILDS</h1>
+        <div style="color:var(--muted);margin-top:6px">Used and trusted by many creators and players — Premium Minecraft resources.</div>
+        <div class="search"><input placeholder="Search plugins, builds, bundles..." id="searchInput"></div>
+
+        <button id="introBtn" class="btn ghost" style="margin-top:10px;">自己紹介を見る</button>
+        <div id="introText" style="margin-top:10px;display:none; background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; color:#fff;">
+          こんにちは、Yuuziです。Minecraftプラグインとビルドの制作をしています。楽しいゲーム体験を提供するのが好きです！
+        </div>
+
+        <div class="categories" id="cats">
+          <div class="cat active">All</div>
+          <div class="cat">Plugins</div>
+          <div class="cat">Builds</div>
+          <div class="cat">Bundles</div>
+        </div>
+
+        <div class="grid" id="productGrid">
+          <!-- product template inserted by JS -->
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div style="background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)">
+          <h3 style="margin:0 0 8px 0">Videos powered by our store</h3>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+            <img src="https://i.imgur.com/HQmF4Dw.jpeg" style="width:100%;border-radius:6px">
+            <img src="https://i.imgur.com/gsT5ugy.png" style="width:100%;border-radius:6px">
+            <img src="https://i.imgur.com/fvbP3bm.png" style="width:100%;border-radius:6px">
+            <img src="https://i.imgur.com/ctVwpuJ.jpeg" style="width:100%;border-radius:6px">
+          </div>
+          <div style="margin-top:10px;text-align:center"><button class="btn ghost">View Cart</button></div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.03)">
+          <h4 style="margin:0">Trusted by creators</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+            <img src="https://i.imgur.com/ocv2br9.png" style="width:60px;height:60px;border-radius:6px;object-fit:cover">
+            <img src="https://i.imgur.com/4gaBbdR.png" style="width:60px;height:60px;border-radius:6px;object-fit:cover">
+            <img src="https://i.imgur.com/EeKaGd3.png" style="width:60px;height:60px;border-radius:6px;object-fit:cover">
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section style="max-width:1200px; margin: 40px auto; padding: 0 18px; color:#e6eef5;">
+      <h3>クリックゲーム！</h3>
+      <p>ボタンを押してカウントアップしよう！</p>
+      <button id="gameBtn" class="btn">クリックしてね</button>
+      <div style="margin-top:8px;">クリック数: <span id="clickCount">0</span></div>
+    </section>
+
+    <footer>
+      <div>© 2025 NexusMc</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:6px">This is a visual clone for learning purposes.</div>
+    </footer>
+  </main>
+
+  <script>
+    // sample product data (replace image URLs with yours)
+    const products = [
+      { id:1, title:'Premium Event Plugin', price:'£6.00', img:'https://via.placeholder.com/800x450?text=Plugin+1', category:'Plugins' },
+      { id:2, title:'Adventure Build Pack', price:'£12.00', img:'https://via.placeholder.com/800x450?text=Build+Pack', category:'Builds' },
+      { id:3, title:'Streamer Bundle', price:'£20.00', img:'https://via.placeholder.com/800x450?text=Bundle', category:'Bundles' },
+      { id:4, title:'Mini Games Pack', price:'£4.00', img:'https://via.placeholder.com/800x450?text=Mini+Games', category:'Plugins' },
+      { id:5, title:'Creative City Build', price:'£10.00', img:'https://via.placeholder.com/800x450?text=City+Build', category:'Builds' }
+    ];
+
+    const grid = document.getElementById('productGrid');
+
+    // 通貨レート（GBP基準の簡易換算）
+    const rates = {
+      GBP: 1,
+      USD: 1.25,  // 1 GBP = 1.25 USD (例)
+      JPY: 180    // 1 GBP = 180 JPY (例)
+    };
+
+    let currentCurrency = 'GBP';
+
+    const currencySelect = document.getElementById('currencySelect');
+    currencySelect.addEventListener('change', e => {
+      currentCurrency = e.target.value;
+      render(products);
+    });
+
+    // 価格表示を通貨換算するヘルパー関数
+    function formatPrice(priceStr) {
+      const num = parseFloat(priceStr.replace(/[^\d.]/g, ''));
+      if (isNaN(num)) return priceStr;
+      
+      let symbol = '';
+      let converted = 0;
+      
+      switch(currentCurrency){
+        case 'GBP':
+          symbol = '£';
+          converted = num;
+          break;
+        case 'USD':
+          symbol = '$';
+          converted = (num * rates.USD).toFixed(2);
+          break;
+        case 'JPY':
+          symbol = '¥';
+          converted = Math.round(num * rates.JPY);
+          break;
+      }
+      return symbol + converted;
+    }
+
+    function render(list){
+      grid.innerHTML = '';
+      list.forEach(p=>{
+        const a = document.createElement('article'); a.className='card';
+        a.innerHTML = `
+          <div class="thumb" style="background-image:url('${p.img}')"></div>
+          <h4>${p.title}</h4>
+          <p style="color:var(--muted);margin:6px 0">${p.category}</p>
+          <div class="meta"><div style="font-weight:700">${formatPrice(p.price)}</div><button class="btn" data-id="${p.id}">Buy</button></div>
+        `;
+        grid.appendChild(a);
+      });
+      document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click', ()=>alert('Demo:詳細はmail:white,canada.com@gmaill.comまで')));
+    }
+    render(products);
+
+    // category filter
+    document.getElementById('cats').addEventListener('click', e=>{
+      if(!e.target.classList.contains('cat')) return;
+      document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+      e.target.classList.add('active');
+      const q = e.target.textContent.trim();
+      if(q==='All') render(products); else render(products.filter(p=>p.category===q));
+    });
+
+    // search
+    document.getElementById('searchInput').addEventListener('input', e=>{
+      const q = e.target.value.toLowerCase();
+      render(products.filter(p=>p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+    });
+
+    // 自己紹介ボタン
+    document.getElementById('introBtn').addEventListener('click', ()=>{
+      const intro = document.getElementById('introText');
+      intro.style.display = (intro.style.display === 'none') ? 'block' : 'none';
+    });
+
+    // 簡単なクリックゲーム
+    let clickCount = 0;
+    const clickCountSpan = document.getElementById('clickCount');
+    document.getElementById('gameBtn').addEventListener('click', () => {
+      clickCount++;
+      clickCountSpan.textContent = clickCount;
+    });
+
+    // change cursor on page load (uses network image)
+    window.addEventListener('load', ()=>{
+      document.body.classList.add('cursor-active');
+      // revert after 5s (optional) - comment out to keep cursor permanent
+      // setTimeout(()=>document.body.classList.remove('cursor-active'),5000);
+    });
+  </script>
+</body>
+</html>
